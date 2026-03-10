@@ -1,30 +1,17 @@
 # JSO Agency Trust & Transparency Agent
 
-**Assignment:** Agentic JSO — Phase-2: Agentic Career Intelligence Development  
-**Candidate:** Reeth J  
-**Role:** Agentic AI Engineer Intern (Career Intelligence Systems)  
-**Company:** AariyaTech Corp Private Limited
+An AI-powered platform for evaluating and monitoring recruitment agency trustworthiness on the JSO ecosystem.
 
 ---
 
 ## Overview
 
-This repository contains the complete submission for the Agentic JSO assignment, including:
+Users on job platforms cannot easily determine which recruitment agencies are trustworthy — leading to wasted time, fraud exposure, and platform credibility issues. The **Agency Trust & Transparency Agent** solves this by:
 
-- **[ASSIGNMENT_ANSWERS.md](ASSIGNMENT_ANSWERS.md)** — Full written answers for Part A (all 7 sections), Part B (Agency Trust & Transparency Agent design), and Part C (Ethical & Governance considerations)
-- **[prototype/](prototype/)** — A working Next.js prototype demonstrating the Agency Trust & Transparency Agent
-
-## The Problem
-
-Users on the JSO platform cannot easily determine which recruitment agencies are trustworthy. This leads to wasted time, fraud exposure, and platform credibility issues.
-
-## The Solution
-
-An AI-powered **Agency Trust & Transparency Agent** that:
-- Computes **transparent trust scores** (0–100) from reviews, placement success rates, feedback ratings, compliance records, and platform tenure
-- Provides a **conversational AI interface** for querying agency trustworthiness
-- Surfaces **real-time analytics** and trend monitoring across all four JSO dashboards
-- Detects **anomalies** (fake reviews, declining agencies) and alerts stakeholders
+- Computing **transparent trust scores** (0–100) from reviews, placement success rates, feedback ratings, compliance records, and platform tenure
+- Providing a **conversational AI interface** for querying agency trustworthiness
+- Surfacing **real-time analytics** and trend monitoring across dashboards
+- Detecting **anomalies** (fake reviews, declining agencies) and alerting stakeholders
 
 ## Prototype
 
@@ -48,9 +35,11 @@ Open [http://localhost:3000](http://localhost:3000)
 
 | Feature | Description |
 |---------|-------------|
-| **Agency Dashboard** | Browse agencies sorted by trust score with search and filter |
+| **Agency Dashboard** | Browse agencies sorted by trust score with search, filter, and sort |
 | **Trust Score Badges** | Visual score circles with tier labels (Excellent/Good/Fair/Poor) |
 | **Agency Detail View** | Click any agency for full breakdown — score history charts, component analysis, reviews |
+| **Compare Agencies** | Side-by-side radar chart comparison of up to 3 agencies with detailed metrics table |
+| **Admin Reports** | Platform-wide analytics — flagged agencies, trust rankings, trend lines, compliance overview |
 | **AI Chat Agent** | Conversational interface to ask about agency trust (bottom-right chat button) |
 | **Trust Analytics** | Pie charts and bar charts showing trust distribution and placement rates |
 | **Score Explanation** | Transparent algorithm display showing all weights and factors |
@@ -91,17 +80,17 @@ Trust Score = (0.30 × Reviews) + (0.25 × Placements) + (0.20 × Feedback)
 
 ```
 JSO-Agent/
-├── ASSIGNMENT_ANSWERS.md    # Complete assignment answers (Parts A, B, C)
 ├── README.md                # This file
-├── Rules/                   # Assignment PDF
-└── prototype/               # Working Next.js prototype
+└── prototype/               # Next.js application
     └── src/
         ├── app/
         │   ├── page.tsx             # Main dashboard page
         │   ├── components/          # UI components
-        │   │   ├── AgencyCard.tsx    # Agency listing card
-        │   │   ├── AgencyDetail.tsx  # Detail modal with charts
-        │   │   ├── ChatWidget.tsx    # AI chat interface
+        │   │   ├── AdminReports.tsx   # Admin trust reports & flagged agencies
+        │   │   ├── AgencyCard.tsx     # Agency listing card
+        │   │   ├── AgencyDetail.tsx   # Detail modal with charts
+        │   │   ├── ChatWidget.tsx     # AI chat interface
+        │   │   ├── CompareView.tsx    # Side-by-side agency comparison
         │   │   ├── DashboardStats.tsx # Stats overview
         │   │   └── TrustDistribution.tsx # Analytics charts
         │   └── api/
@@ -113,9 +102,8 @@ JSO-Agent/
 
 ## Deployment
 
-This prototype is ready to deploy on Vercel:
-
-```bash
-cd prototype
-npx vercel
-```
+Deploy to Vercel with:
+- **Root Directory:** `prototype`
+- **Framework:** Next.js (auto-detected)
+- **Build Command:** `npm run build`
+- No environment variables required

@@ -280,10 +280,10 @@ export default function Home() {
 
         <footer className="text-center py-6 border-t border-gray-800">
           <p className="text-xs text-gray-500">
-            Agency Trust & Transparency Agent — JSO Phase-2: Agentic Career Intelligence Development
+            Agency Trust & Transparency Agent — JSO Career Intelligence Platform
           </p>
           <p className="text-xs text-gray-600 mt-1">
-            Prototype Demo | Powered by Anthropic Claude
+            Powered by Agentic AI
           </p>
         </footer>
       </main>
