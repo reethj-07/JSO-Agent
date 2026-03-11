@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+backend/__pycache__/
+backend/agent/__pycache__/
+backend/routers/__pycache__/
