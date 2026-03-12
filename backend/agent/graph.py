@@ -1,6 +1,5 @@
-"""LangGraph agent — stateful graph with Gemini LLM and tool-calling loop."""
+"""LangGraph agent — stateful graph with LLM and tool-calling loop."""
 
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import MessagesState
@@ -31,15 +30,34 @@ Guidelines:
 - Respond in a professional, helpful tone"""
 
 
-def build_agent():
-    """Build and return the LangGraph agent."""
+def _get_llm():
+    """Pick the best available LLM based on configured API keys."""
     settings = get_settings()
 
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
-        google_api_key=settings.gemini_api_key,
-        temperature=0.3,
-    )
+    if settings.groq_api_key:
+        from langchain_groq import ChatGroq
+        return ChatGroq(
+            model="llama-3.3-70b-versatile",
+            api_key=settings.groq_api_key,
+            temperature=0.3,
+        ), "groq/llama-3.3-70b-versatile"
+
+    if settings.gemini_api_key:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        return ChatGoogleGenerativeAI(
+            model="gemini-2.0-flash",
+            google_api_key=settings.gemini_api_key,
+            temperature=0.3,
+        ), "gemini-2.0-flash"
+
+    raise RuntimeError("No LLM API key configured. Set GROQ_API_KEY or GEMINI_API_KEY in .env")
+
+
+def build_agent():
+    """Build and return the LangGraph agent."""
+    llm, model_name = _get_llm()
+    global _model_name
+    _model_name = model_name
 
     llm_with_tools = llm.bind_tools(ALL_TOOLS)
     tool_node = ToolNode(ALL_TOOLS)
@@ -74,6 +92,7 @@ def build_agent():
 
 # Singleton agent instance
 _agent = None
+_model_name = "unknown"
 
 
 def get_agent():
@@ -81,6 +100,11 @@ def get_agent():
     if _agent is None:
         _agent = build_agent()
     return _agent
+
+
+def get_model_name() -> str:
+    get_agent()  # ensure built
+    return _model_name
 
 
 async def run_agent(query: str) -> tuple[str, list[str]]:

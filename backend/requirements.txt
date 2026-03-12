@@ -5,6 +5,7 @@ pydantic-settings==2.9.1
 supabase==2.15.2
 langchain-core==0.3.55
 langchain-google-genai==2.1.4
+langchain-groq==0.3.2
 langgraph==0.3.34
 python-dotenv==1.1.0
 httpx==0.28.1
