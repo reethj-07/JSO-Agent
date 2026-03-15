@@ -16,14 +16,20 @@ def _tier(score: float) -> str:
 
 
 @tool
-def search_agencies(query: str = "", industry: str = "", min_score: float = 0) -> str:
+def search_agencies(query: str = "", industry: str = "", min_score: str | float = 0) -> str:
     """Search for recruitment agencies on the platform. Filter by name, industry, or minimum trust score.
     Returns a summary of matching agencies with their trust scores and key metrics."""
     db = get_supabase()
     q = db.table("agencies").select("*")
 
-    if min_score > 0:
-        q = q.gte("trust_score", min_score)
+    # Some models pass numeric tool args as strings (e.g. "0").
+    try:
+        min_score_value = float(min_score)
+    except (TypeError, ValueError):
+        min_score_value = 0.0
+
+    if min_score_value > 0:
+        q = q.gte("trust_score", min_score_value)
 
     result = q.order("trust_score", desc=True).execute()
     agencies = result.data
