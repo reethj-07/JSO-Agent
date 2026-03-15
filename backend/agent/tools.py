@@ -16,13 +16,13 @@ def _tier(score: float) -> str:
 
 
 @tool
-def search_agencies(query: str = "", industry: str = "", min_score: str | float = 0) -> str:
+def search_agencies(query: str = "", industry: str = "", min_score: str = "0") -> str:
     """Search for recruitment agencies on the platform. Filter by name, industry, or minimum trust score.
     Returns a summary of matching agencies with their trust scores and key metrics."""
     db = get_supabase()
     q = db.table("agencies").select("*")
 
-    # Some models pass numeric tool args as strings (e.g. "0").
+    # Parse numeric threshold from string input (Groq tool calls commonly send strings).
     try:
         min_score_value = float(min_score)
     except (TypeError, ValueError):
