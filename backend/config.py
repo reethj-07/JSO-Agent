@@ -1,5 +1,4 @@
 from pydantic_settings import BaseSettings
-from pydantic import field_validator
 from functools import lru_cache
 import json
 
@@ -9,20 +8,23 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     supabase_url: str
     supabase_anon_key: str
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: str = "http://localhost:3000"
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors(cls, v):
-        if isinstance(v, str):
-            try:
-                parsed = json.loads(v)
-                if isinstance(parsed, str):
-                    return [parsed]
-                return [origin.strip() for origin in parsed if str(origin).strip()]
-            except json.JSONDecodeError:
-                return [s.strip() for s in v.split(",") if s.strip()]
-        return v
+    def get_cors_origins(self) -> list[str]:
+        value = self.cors_origins.strip()
+        if not value:
+            return ["http://localhost:3000"]
+
+        try:
+            parsed = json.loads(value)
+            if isinstance(parsed, str):
+                return [parsed]
+            if isinstance(parsed, list):
+                return [str(origin).strip() for origin in parsed if str(origin).strip()]
+        except json.JSONDecodeError:
+            pass
+
+        return [origin.strip() for origin in value.split(",") if origin.strip()]
 
     model_config = {"env_file": "../.env", "env_file_encoding": "utf-8"}
 
