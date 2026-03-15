@@ -14,10 +14,11 @@ router = APIRouter(prefix="/api/agent", tags=["agent"])
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     query = req.query.strip()
-    model_label = f"{get_model_name()} + LangGraph"
+    model_label = "LangGraph"
 
     try:
         response_text, tools_used = await run_agent(query)
+        model_label = f"{get_model_name()} + LangGraph"
     except Exception as e:
         logger.error(f"Agent error: {e}")
         raise HTTPException(status_code=502, detail=f"Agent error: {str(e)}")
